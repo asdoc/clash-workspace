@@ -3,4 +3,3 @@
 db.sqlite3
 app/static/files/*
 files/*
-clash/wsgi.py
