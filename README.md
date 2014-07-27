@@ -24,10 +24,12 @@
     ```
 
 ###Resetting the app
-  - rm db.sqlite3
-  - python manage.py shell
-  - from app.script import clean_up()
-  - clean_up()
+  ```
+  rm db.sqlite3
+  python manage.py shell
+  from app.script import clean_up()
+  clean_up()
+  ```
   
   
   
