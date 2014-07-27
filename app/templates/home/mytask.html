@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>My Tasks</title>
+<link rel="stylesheet" type="text/css" href="/static/task.css">
+<script src="/static/jq.js"></script>
+
+<script>
+	function fun(file_id,file_name,file_path)
+	{
+		var xmlhttp;
+		xmlhttp=new XMLHttpRequest();
+		xmlhttp.open("POST","/generatefile/{{team}}",true);
+		xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		xmlhttp.send("file_id="+file_id.toString()+";username={{user.uname}};sesid={{user.ses_id}}");
+		xmlhttp.onreadystatechange=function()
+		{
+			if(xmlhttp.readyState==4&&xmlhttp.status==200)
+			{
+				// alert("path: "+"/static/files/"+file_path+"/"+file_name);
+				window.location.href = "/static/files/"+file_path+"/"+file_name;
+				//$(this).attr({'href':"/static/files/"+file_path+"/"+file_name,'target':'_blank'});
+			}
+		}
+	}
+</script>
+
+<!--script>
+	var cook=document.cookie;
+	var tp=cook.indexOf("name=");
+	var tosend=cook.substring(tp+5);
+	var xmlhttp;
+	xmlhttp=new XMLHttpRequest();
+	xmlhttp.open("POST","cques.php",true);
+	xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	xmlhttp.send("name="+tosend);
+	xmlhttp.onreadystatechange=function()
+	{
+		if(xmlhttp.readyState==4&&xmlhttp.status==200)
+		{
+			document.getElementById("newdiv").innerHTML=xmlhttp.responseText+"  ";
+			var a=document.createElement('a');
+			a.href="http://localhost/clash/view";
+			a.innerText="view";
+			document.getElementById("newdiv").appendChild(a);
+		}
+	}
+</script-->
+
+</head>
+<body>
+<div class="myHead">
+<div class="jumbotron">
+      <h1>Clash Workspace : {{round}}</h1>
+      <p>Work. Eat. Repeat.</p>
+      <p></p>
+</div>
+
+<div class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Clash '14</a>
+          </div>
+          
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="../feeds/{{ team }}">Feeds</a></li>
+              <li><a href="../mom/{{ team }}">M.O.Ms</a></li>
+              <li><a href="../alltasks/{{ team }}">All Tasks</a></li>   
+              <li class="active"><a href="../mytasks/{{ team }}">My Tasks</a></li>
+			  </ul>
+			 </li>
+            </ul><!--nav navbar-nav-->
+            <a class="btn btn-small btn-primary pull-right">Logout</a>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+</div><!--/.nsv inverse-->
+</div><!--/.myHead -->
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>
+        	File Lists
+        	{% if user.is_admin %}
+				<a  href="/ctasks/{{team}}" class="btn btn-small btn-success pull-right">New Task</a>
+			{% endif %}
+        </legend>
+        
+        {% for task in tasks %}
+        <!--one MOM conntainer-->
+        <div class="container">    
+		    <div class="control-group">
+		    
+		      <div class="row">
+		        <div class="col-lg-6">
+		          <h2>{{ task.task_name }}</h2>   
+		     	</div> 
+		       </div> 
+
+			
+		        <!--status checkboxes -->
+		        <div class="row">
+				  <div class="col-lg-4">
+					<div class="input-group">
+					  <span class="input-group-addon">
+						<span class="glyphicon glyphicon-ok"></span>
+					  </span>
+					  <input type="text" class="form-control" value="Created: {{ task.created_time }}" disabled="disabled">
+					</div><!-- /input-group -->
+				  </div><!-- /.col-lg-4 -->
+				  
+				  	<div class="col-lg-4">
+					  <div class="input-group">
+					  <span class="input-group-addon">
+						<span class="glyphicon glyphicon-ok"></span>
+					  </span>
+					  <input type="text" class="form-control" value="Deadline: {{task.deadline_time}}" disabled="disabled">
+					</div><!-- /input-group -->
+				  </div><!-- /.col-lg-4-->
+				  
+				  				  {% if not task.submitted %}
+				  <div class="row">
+				    <div class="col-lg-4">
+				      <a class="btn btn-small btn-default pull-left" disabled="disabled">Not submitted</a>
+				    </div><!-- /.col-lg-6-->
+				  {% endif %}				  
+				  		
+				  {% if task.submitted and not task.accepted %}
+				      {% if not user.is_admin %}
+						  <div class="row">
+							<div class="col-lg-4">
+							  <a class="btn btn-small btn-warning pull-left" disabled="disabled">Under review</a>
+							</div><!-- /.col-lg-6-->
+					  {% else %}
+						  <div class="row">
+						  <form action="./{{team}}" method="post">
+						  <input type="hidden" name="task_id" value="{{task.task_id}}">
+							<div class="col-lg-4">
+							<input type="hidden" name="accept" value="accept">
+							  <input type="submit" class="btn btn-small btn-warning pull-left" value="Accept">
+							</div><!-- /.col-lg-6-->
+						   </form>					  		
+					  {% endif %}
+				  {% endif %}				  
+
+				  {% if task.accepted %}
+				  <div class="row">
+				    <div class="col-lg-4">
+				      <a class="btn btn-small btn-success pull-left" disabled="disabled">Accepted</a>
+				    </div><!-- /.col-lg-6-->
+				  {% endif %}	
+				  
+				</div><!--/.row -->
+				<br>
+				
+				{% for file in task.file_set.all %}
+				  <div class="row">
+				    <div class="col-lg-4">
+				      <a class="btn btn-small btn-default pull-left" disabled="disabled">{{ file.file_name }}</a>
+				    </div><!-- /.col-lg-6-->		
+				    
+				    <div class="col-lg-3">
+					<div class="input-group pull-right">
+					  <span class="input-group-addon">
+						<span class="glyphicon glyphicon-ok"></span>
+					  </span>
+					  <input type="text" class="form-control" value="{{file.submitted_time}}" disabled="disabled">
+					</div><!-- /input-group -->
+				  </div><!-- /.col-lg-2 -->
+				  <div class="col-lg-1 pull-left">
+					  <a onclick="fun({{file.file_id}},'{{file.file_name}}','{{user.files_path}}')" class="btn btn-small btn-custom-deep pull-left">Download</a>
+					</div><!-- /.col-lg-1-->
+					
+					{% if file.accepted %}
+					    <div class="col-lg-1 pull-left">
+					  		<a class="btn btn-small btn-success pull-left" disabled="disabled">Accepted</a>
+						</div><!-- /.col-lg-1-->
+						<!-- green button -->
+					{% else %}
+						<div class="col-lg-1 pull-left">
+					  		<a class="btn btn-warning pull-left" disabled="disabled">Reviewing</a>
+						</div><!-- /.col-lg-1-->
+						<!-- orange button -->
+					{% endif %}
+					
+				  </div><!-- /.ROW-->
+				 <br>
+				 {% endfor %}
+				  
+				  <hr 	style="height:1px">
+				  
+				
+				</div>
+				  <!--upload button-->
+		      
+		      <form action="./{{team}}" enctype="multipart/form-data"  method="post">
+		      <div class="row">  
+		      <div class="col-lg-4">
+		          <a class="btn btn-small btn-default pull-left" disabled="disabled">Upload new file</a>
+		     	</div> 
+		     	
+		        
+		        
+		        <div class="col-lg-3">
+					<div class="input-group">
+					  <span class="input-group-addon">
+						<span class="glyphicon glyphicon-ok"></span>
+					  </span>
+					  <input type="text" class="form-control" placeholder="Tags">
+					</div><!-- /input-group -->
+				  </div><!-- /.col-lg-3 -->
+		        
+				<div class="col-lg-1">
+				    <div class="fileupload fileupload-new" data-provides="fileupload">
+						<span class="btn btn-primary btn-file">
+							<span class="fileupload-new">
+								Select file
+							</span>
+							<span class="fileupload-exists">
+								Change
+							</span>
+							<input type="hidden" name="task_id" value="{{task.task_id}}">
+							<input type="file" name="file_submit">
+						</span>
+						<span class="fileupload-preview"></span>
+						<a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
+					</div>
+				</div><!-- /.col-lg-1 -->
+				
+				<div class="col-lg-1 pull-left">
+					  <input type="submit" class="btn btn-small btn-success pull-left" value="&nbsp;&nbsp;Upload&nbsp;&nbsp;">
+				</div>
+			</div><!--row-->
+			</form>
+			
+			</div><!--/.control-group -->
+        </div><!--/.container -->
+        <hr>
+        {% endfor %}
+        
+        
+        
+    </fieldset>
+</div>
+

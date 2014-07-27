@@ -1,0 +1,13 @@
+<html>
+	<title>New task</title>
+	{% for task in tasks %}
+		<b> Task id: {{task.task_id}} | </b>
+		<b> {{task.task_name}}</b><br/>
+		Assigned To: {{task.assigned_to}}
+		<form action="/submit/{{team}}" enctype="multipart/form-data" method="post">
+			<input type="hidden" name="task_id" value="{{task.task_id}}">
+			<input type="file" name="file_submit">
+			<input type="submit" value="upload">
+		</form>
+	{% endfor %}
+</html>

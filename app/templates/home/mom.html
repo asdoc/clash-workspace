@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Clash M.O.M</title>
+<link rel="stylesheet" type="text/css" href="/static/mom.css">
+</head>
+<body>
+<div class="myHead">
+<div class="jumbotron">
+      <h1>Clash Workspace : {{round}}</h1>
+      <p>Work. Eat. Repeat.</p>
+      </p>
+</div>
+
+<div class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>              
+            </button>
+            <a class="navbar-brand" href="#">Clash '14</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li><a href="../feeds/{{team}}">Feeds</a></li>
+              <li class="active"><a href="../mom/{{team}}">M.O.Ms</a></li>
+              <li><a href="../alltasks/{{ team }}">All Tasks</a></li>   
+              <li><a href="../mytasks/{{ team }}">My Tasks</a></li>
+              
+            </ul>
+            <a class="btn btn-small btn-primary pull-right">Logout</a>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+</div><!--/.nsv inverse-->
+</div><!--/.myHead -->
+
+<form class="form-horizontal">
+    <fieldset>
+        <legend>
+        	Feed Updates
+				<a  href="/cmom/{{team}}" class="btn btn-small btn-success pull-right">New MOM</a>
+        </legend>
+
+		{% for mom in moms %}
+		    <!--start of MOM conntainer-->
+		    <div class="container">    
+				<div class="control-group">
+				    <label class="control-label">{{mom.subject}}</label>
+				    <div class="controls">
+				        <p class="form-control-static"> <pre>{{mom.text|safe}}</pre> </p>
+				        <p></p>
+				    </div>
+				    	<!--comments area>
+				    	<label for="user_id" class="col-lg-1">UserName</label>
+						<div class ="col-lg-11">
+							<input class="form-control focusedInput" type="text" value="Post comment here...">
+						</div>
+					
+						<label for="user_id" class="col-lg-1">UserName</label>
+						<div class ="col-lg-11">
+							<input class="form-control focusedInput" type="text" value="Post comment here...">
+						</div-->
+					
+				</div><!--/.control-group -->
+		    </div><!--/.container -->
+		    <!-- end of MOM container -->
+		    <br/><br/>
+        {% endfor %}
+    </fieldset>
+</form>
+

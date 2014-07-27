@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Clash Feeds</title>
+<link rel="stylesheet" type="text/css" href="/static/feed.css">
+</head>
+<body>
+<div class="myHead">
+<div class="jumbotron">
+      <h1>Clash Workspace : {{round}}</h1>
+      <p>Work. Eat. Repeat.</p>
+      <p></p>
+</div>
+
+<div class="navbar navbar-inverse" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Clash '14</a>
+          </div>
+          <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="../feeds/{{ team }}">Feeds</a></li>
+              
+              <li><a href="../mom/{{ team }}">M.O.Ms</a></li>
+              <li><a href="../alltasks/{{ team }}">All Tasks</a></li>   
+              <li><a href="../mytasks/{{ team }}">My Tasks</a></li>
+            </ul>
+            <a class="btn btn-small btn-primary pull-right">Logout</a>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+</div><!--/.nsv inverse-->
+</div><!--/.myHead -->
+
+<div class="form-horizontal">
+    <fieldset>
+        <legend>
+        	Feed Updates
+        	{% if isadmin %}
+				<a  href="/ctasks/{{team}}" class="btn btn-small btn-success pull-right">New Task</a>
+			{% endif %}
+        </legend>
+        {% block content %}
+		{% for task in tasks %}
+		    <!--start of feed conntainer-->
+		    <div class="container">    
+				<div class="control-group">
+				    <label class="control-label">Task id: {{task.task_id}} : {{ task.last_modified_time }}</label>
+				    <div class="controls">
+				        <p class="form-control-static"> <pre>{{task.task_name}}</pre></p>
+				        <p></p>
+				    </div>
+
+				    <div class="row">
+
+					  <!--div class="col-lg-4">
+						<div class="input-group">
+						  Assigned to: {{task.assigned_to}}
+						</div><!-- /input-group >
+					  </div><!-- /.col-lg-4 -->
+					  				    
+				    <!--status checkboxes -->
+					  <div class="col-lg-4">
+						<div class="input-group">
+						  <span class="input-group-addon">
+						  	{% if not task.submitted %}
+								<span class="glyphicon glyphicon-ok"></span>
+							{% else %}
+								<input type="checkbox" disabled="disabled"><!--chenge checked to set-->
+							{% endif %}
+						  </span>
+						  <input type="text" class="form-control" value="Not submitted" disabled="disabled">
+						</div><!-- /input-group -->
+					  </div><!-- /.col-lg-4 -->
+					  <div class="col-lg-4">
+						  <div class="input-group">
+						  <span class="input-group-addon">
+						  	{% if task.submitted and not task.accepted %}
+								<span class="glyphicon glyphicon-ok"></span>
+							{% else %}
+								<input type="checkbox" disabled="disabled"><!--chenge checked to set-->
+							{% endif %}						  </span>
+						  <input type="text" class="form-control" value="Under Review" disabled="disabled">
+						</div><!-- /input-group -->
+					  </div><!-- /.col-lg-4 -->					  
+					  <div class="col-lg-4">
+						<div class="input-group">
+						  <span class="input-group-addon">
+						  	{% if task.accepted %}
+								<span class="glyphicon glyphicon-ok"></span>
+							{% else %}
+								<input type="checkbox" disabled="disabled"><!--chenge checked to set-->
+							{% endif %}						  </span>
+						  <input type="text" class="form-control" value="Accepted" disabled="disabled">
+						</div><!-- /input-group -->
+					  </div><!-- /.col-lg-6 -->
+				    </div>
+				    	<!--panel for posting previous comments-->
+				</div><!--/.control-group -->
+		    </div><!--/.container -->
+		    <!--end of MOM conntainer-->
+		    <br/><br/>
+        {% endfor %}
+        {% endblock %}
+    </fieldset>
+</div>
