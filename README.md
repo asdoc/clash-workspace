@@ -16,10 +16,12 @@
     - round2
     - swifttyper
 
-  * After creation of users, run the scripts from app/script.py :
-    - python manage.py shell
-    - from app.script import user_folders()
-    - user_folders()
+  * After creation of users, run the scripts from root directory of the app :
+    ```
+    python manage.py shell
+    from app.script import user_folders()
+    user_folders()
+    ```
 
 ###Resetting the app
   - rm db.sqlite3
