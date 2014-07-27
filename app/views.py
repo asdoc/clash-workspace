@@ -121,7 +121,6 @@ def home(request):
 				team = str(team)
 				context = {
 					"team": str(get_team_number(team)),
-					"round": get_formatted_team_name(team_number),
 				}
 				response = render(request, 'home/home.html', context)
 			response.set_cookie(
@@ -147,7 +146,6 @@ def home(request):
 			team = str(team)
 			context = {
 				"team": str(get_team_number(team)),
-				"round": get_formatted_team_name(team_number),
 			}
 			return render(request, 'home/home.html',context)
 	else:
