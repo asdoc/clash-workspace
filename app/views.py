@@ -382,3 +382,10 @@ def generate_file(request, team_number):
 		else:
 			return HttpResponse("<html>Access denied</html>")
 	return HttpResponse("<html>Not logged in</html>")
+	
+def logout(request):
+    response = HttpResponse()
+    response = render(request, 'home/login.html')
+    response.delete_cookie('sesid')
+    response.delete_cookie('username')
+    return response

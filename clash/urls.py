@@ -17,4 +17,5 @@ urlpatterns = patterns('',
     url(r'^alltasks/(.*)$', 'app.views.alltask'),
     url(r'^mytasks/(.*)$', 'app.views.mytask'),
     url(r'generatefile/(.*)$', 'app.views.generate_file'),
+    url(r'logout/$', 'app.views.logout'),
 )
