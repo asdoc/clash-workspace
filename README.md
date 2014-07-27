@@ -24,6 +24,7 @@
     ```
 
 ###Resetting the app
+  Execute the following commands from the root directory of the app
   ```
   rm db.sqlite3
   python manage.py shell
