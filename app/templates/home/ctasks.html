@@ -4,9 +4,12 @@
 		<textarea placeholder="task name" style="height:10%;width:40%" name="task_name"></textarea><br/><br/>
 		<textarea placeholder="tags" style="height:10%;width:40%" name="tags"></textarea><br/><br/>
 
-		<b>Assigned to:</b> 
+		<b>Assigned to:</b>
 		<select name="assigned_to">
 			{% for user in users %}
+				<option name="{{user.uname}}">{{user}}</option>
+			{% endfor %}
+			{% for user in admins %}
 				<option name="{{user.uname}}">{{user}}</option>
 			{% endfor %}
 		</select>

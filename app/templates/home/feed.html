@@ -27,9 +27,9 @@
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li class="active"><a href="../feeds/{{ team }}">Feeds</a></li>
-              
+
               <li><a href="../mom/{{ team }}">M.O.Ms</a></li>
-              <li><a href="../alltasks/{{ team }}">All Tasks</a></li>   
+              <li><a href="../alltasks/{{ team }}">All Tasks</a></li>
               <li><a href="../mytasks/{{ team }}">My Tasks</a></li>
             </ul>
             <a href="/logout" class="btn btn-small btn-primary pull-right">Logout</a>
@@ -49,11 +49,14 @@
         {% block content %}
 		{% for task in tasks %}
 		    <!--start of feed conntainer-->
-		    <div class="container">    
+		    <div class="container">
 				<div class="control-group">
 				    <label class="control-label">Task id: {{task.task_id}} : {{ task.last_modified_time }}</label>
 				    <div class="controls">
-				        <p class="form-control-static"> <pre>{{task.task_name}}</pre></p>
+				        <p class="form-control-static"> <pre>{{task.task_name}}</pre>
+				<pre>Assigned to: {{task.assigned_to}}
+Created by: {{task.created_by}}</pre>
+				        </p>
 				        <p></p>
 				    </div>
 
@@ -64,7 +67,7 @@
 						  Assigned to: {{task.assigned_to}}
 						</div><!-- /input-group >
 					  </div><!-- /.col-lg-4 -->
-					  				    
+
 				    <!--status checkboxes -->
 					  <div class="col-lg-4">
 						<div class="input-group">
@@ -88,7 +91,7 @@
 							{% endif %}						  </span>
 						  <input type="text" class="form-control" value="Under Review" disabled="disabled">
 						</div><!-- /input-group -->
-					  </div><!-- /.col-lg-4 -->					  
+					  </div><!-- /.col-lg-4 -->
 					  <div class="col-lg-4">
 						<div class="input-group">
 						  <span class="input-group-addon">
@@ -104,8 +107,10 @@
 				    	<!--panel for posting previous comments-->
 				</div><!--/.control-group -->
 		    </div><!--/.container -->
+
 		    <!--end of MOM conntainer-->
 		    <br/><br/>
+
         {% endfor %}
         {% endblock %}
     </fieldset>

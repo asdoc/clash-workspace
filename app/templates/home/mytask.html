@@ -5,6 +5,27 @@
 <link rel="stylesheet" type="text/css" href="/static/task.css">
 <script src="/static/jq.js"></script>
 
+{% for task in tasks %}
+    <script>
+        $(document).ready(function()
+        {
+          $('#div{{task.task_id}}').hide();
+          $("#btn{{task.task_id}}").click(function()
+          {
+            var link = $(this);
+            $("#div{{task.task_id}}").toggle("1.5", function()
+            {
+                if ($(this).is(':visible')) {
+                     link.text('Collapse');
+                } else {
+                     link.text('Expand');
+                }
+            });
+          });
+        });
+        </script>
+{% endfor %}
+
 <script>
 	function fun(file_id,file_name,file_path)
 	{
@@ -68,17 +89,17 @@
             </button>
             <a class="navbar-brand" href="#">Clash '14</a>
           </div>
-          
+
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <li><a href="../feeds/{{ team }}">Feeds</a></li>
               <li><a href="../mom/{{ team }}">M.O.Ms</a></li>
-              <li><a href="../alltasks/{{ team }}">All Tasks</a></li>   
+              <li><a href="../alltasks/{{ team }}">All Tasks</a></li>
               <li class="active"><a href="../mytasks/{{ team }}">My Tasks</a></li>
 			  </ul>
 			 </li>
             </ul><!--nav navbar-nav-->
-            <a href="logout" class="btn btn-small btn-primary pull-right">Logout</a>
+            <a href="/logout" class="btn btn-small btn-primary pull-right">Logout</a>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
 </div><!--/.nsv inverse-->
@@ -87,27 +108,27 @@
 <div class="form-horizontal">
     <fieldset>
         <legend>
-        	File Lists
-        	{% if user.is_admin %}
+        	My Tasks
+        	{% if is_admin %}
 				<a  href="/ctasks/{{team}}" class="btn btn-small btn-success pull-right">New Task</a>
 			{% endif %}
         </legend>
-        
+
         {% for task in tasks %}
         <!--one MOM conntainer-->
-        <div class="container">    
+        <div class="container">
 		    <div class="control-group">
-		    
+
 		      <div class="row">
 		        <div class="col-lg-6">
-		          <h2>{{ task.task_name }}</h2>   
-		     	</div> 
-		       </div> 
+		          <h1>{{ task.task_name }}</h1>
+		     	</div>
+		       </div>
 
-			
+
 		        <!--status checkboxes -->
 		        <div class="row">
-				  <div class="col-lg-4">
+				  <div class="col-lg-5">
 					<div class="input-group">
 					  <span class="input-group-addon">
 						<span class="glyphicon glyphicon-ok"></span>
@@ -115,7 +136,7 @@
 					  <input type="text" class="form-control" value="Created: {{ task.created_time }}" disabled="disabled">
 					</div><!-- /input-group -->
 				  </div><!-- /.col-lg-4 -->
-				  
+
 				  	<div class="col-lg-4">
 					  <div class="input-group">
 					  <span class="input-group-addon">
@@ -124,48 +145,50 @@
 					  <input type="text" class="form-control" value="Deadline: {{task.deadline_time}}" disabled="disabled">
 					</div><!-- /input-group -->
 				  </div><!-- /.col-lg-4-->
-				  
+
 				  				  {% if not task.submitted %}
 				  <div class="row">
-				    <div class="col-lg-4">
+				    <div class="col-lg-2">
 				      <a class="btn btn-small btn-default pull-left" disabled="disabled">Not submitted</a>
 				    </div><!-- /.col-lg-6-->
-				  {% endif %}				  
-				  		
+				  {% endif %}
+
 				  {% if task.submitted and not task.accepted %}
-				      {% if not user.is_admin %}
 						  <div class="row">
-							<div class="col-lg-4">
+							<div class="col-lg-2">
 							  <a class="btn btn-small btn-warning pull-left" disabled="disabled">Under review</a>
 							</div><!-- /.col-lg-6-->
-					  {% else %}
-						  <div class="row">
-						  <form action="./{{team}}" method="post">
-						  <input type="hidden" name="task_id" value="{{task.task_id}}">
-							<div class="col-lg-4">
-							<input type="hidden" name="accept" value="accept">
-							  <input type="submit" class="btn btn-small btn-warning pull-left" value="Accept">
-							</div><!-- /.col-lg-6-->
-						   </form>					  		
-					  {% endif %}
-				  {% endif %}				  
+
+				  {% endif %}
 
 				  {% if task.accepted %}
 				  <div class="row">
-				    <div class="col-lg-4">
+				    <div class="col-lg-2">
 				      <a class="btn btn-small btn-success pull-left" disabled="disabled">Accepted</a>
 				    </div><!-- /.col-lg-6-->
-				  {% endif %}	
-				  
+				  {% endif %}
+
+                    <div class="col-lg-1">
+				        <button type="button" class="btn btn-default" id="btn{{task.task_id}}">
+                            Expand
+                        </button>
+                    </div>
+
 				</div><!--/.row -->
 				<br>
-				
+
+                <div id="div{{task.task_id}}">
 				{% for file in task.file_set.all %}
 				  <div class="row">
-				    <div class="col-lg-4">
-				      <a class="btn btn-small btn-default pull-left" disabled="disabled">{{ file.file_name }}</a>
-				    </div><!-- /.col-lg-6-->		
-				    
+				    <div class="col-lg-2">
+				      <a class="btn btn-small btn-default pull-left" disabled="disabled"><b>{{ file.file_name }}</b></a>
+				    </div><!-- /.col-lg-6-->
+
+				    <div class="col-lg-3">
+				      <a class="btn btn-small btn-default pull-left" disabled="disabled"><b>{{ file.tags }}</b></a>
+				    </div><!-- /.col-lg-6-->
+
+
 				    <div class="col-lg-3">
 					<div class="input-group pull-right">
 					  <span class="input-group-addon">
@@ -177,7 +200,7 @@
 				  <div class="col-lg-1 pull-left">
 					  <a onclick="fun({{file.file_id}},'{{file.file_name}}','{{user.files_path}}')" class="btn btn-small btn-custom-deep pull-left">Download</a>
 					</div><!-- /.col-lg-1-->
-					
+
 					{% if file.accepted %}
 					    <div class="col-lg-1 pull-left">
 					  		<a class="btn btn-small btn-success pull-left" disabled="disabled">Accepted</a>
@@ -189,34 +212,34 @@
 						</div><!-- /.col-lg-1-->
 						<!-- orange button -->
 					{% endif %}
-					
+
 				  </div><!-- /.ROW-->
 				 <br>
 				 {% endfor %}
-				  
+                </div>
 				  <hr 	style="height:1px">
-				  
-				
+
+
 				</div>
 				  <!--upload button-->
-		      
+
 		      <form action="./{{team}}" enctype="multipart/form-data"  method="post">
-		      <div class="row">  
-		      <div class="col-lg-4">
-		          <a class="btn btn-small btn-default pull-left" disabled="disabled">Upload new file</a>
-		     	</div> 
-		     	
-		        
-		        
+		      <div class="row">
+		      <div class="col-lg-5">
+		          <a class="btn btn-small btn-default pull-left" disabled="disabled"><b>Upload new file</b></a>
+		     	</div>
+
+
+
 		        <div class="col-lg-3">
 					<div class="input-group">
 					  <span class="input-group-addon">
 						<span class="glyphicon glyphicon-ok"></span>
 					  </span>
-					  <input type="text" class="form-control" placeholder="Tags">
+					  <input type="text" name="tags" class="form-control" placeholder="Created by">
 					</div><!-- /input-group -->
 				  </div><!-- /.col-lg-3 -->
-		        
+
 				<div class="col-lg-1">
 				    <div class="fileupload fileupload-new" data-provides="fileupload">
 						<span class="btn btn-primary btn-file">
@@ -233,20 +256,19 @@
 						<a href="#" class="close fileupload-exists" data-dismiss="fileupload" style="float: none">×</a>
 					</div>
 				</div><!-- /.col-lg-1 -->
-				
+
 				<div class="col-lg-1 pull-left">
 					  <input type="submit" class="btn btn-small btn-success pull-left" value="&nbsp;&nbsp;Upload&nbsp;&nbsp;">
 				</div>
 			</div><!--row-->
 			</form>
-			
 			</div><!--/.control-group -->
         </div><!--/.container -->
         <hr>
         {% endfor %}
-        
-        
-        
+
+
+
     </fieldset>
 </div>
 

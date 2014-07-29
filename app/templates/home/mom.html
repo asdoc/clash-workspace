@@ -2,7 +2,34 @@
 <html lang="en">
 <head>
 <title>Clash M.O.M</title>
+
+<script src="/static/jq.js"></script>
+
+{% for mom in moms %}
+    <script>
+        $(document).ready(function()
+        {
+          $('#div{{mom.mom_id}}').hide();
+          $("#btn{{mom.mom_id}}").click(function()
+          {
+            var link = $(this);
+            $("#div{{mom.mom_id}}").slideToggle("1.5", function()
+            {
+                if ($(this).is(':visible')) {
+                     link.text('Collapse');
+                } else {
+                     link.text('Expand');
+                }
+            });
+          });
+        });
+    </script>
+{% endfor %}
+
 <link rel="stylesheet" type="text/css" href="/static/mom.css">
+<script>
+    $(".collapse1").collapse()
+</script>
 </head>
 <body>
 <div class="myHead">
@@ -20,7 +47,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
-              <span class="icon-bar"></span>              
+              <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">Clash '14</a>
           </div>
@@ -28,9 +55,9 @@
             <ul class="nav navbar-nav">
               <li><a href="../feeds/{{team}}">Feeds</a></li>
               <li class="active"><a href="../mom/{{team}}">M.O.Ms</a></li>
-              <li><a href="../alltasks/{{ team }}">All Tasks</a></li>   
+              <li><a href="../alltasks/{{ team }}">All Tasks</a></li>
               <li><a href="../mytasks/{{ team }}">My Tasks</a></li>
-              
+
             </ul>
             <a href="/logout" class="btn btn-small btn-primary pull-right">Logout</a>
           </div><!--/.nav-collapse -->
@@ -41,30 +68,37 @@
 <form class="form-horizontal">
     <fieldset>
         <legend>
-        	Feed Updates
+        	Minutes of Meeting
 				<a  href="/cmom/{{team}}" class="btn btn-small btn-success pull-right">New MOM</a>
         </legend>
 
 		{% for mom in moms %}
 		    <!--start of MOM conntainer-->
-		    <div class="container">    
+		    <div class="container">
 				<div class="control-group">
-				    <label class="control-label">{{mom.subject}}</label>
-				    <div class="controls">
-				        <p class="form-control-static"> <pre>{{mom.text|safe}}</pre> </p>
-				        <p></p>
-				    </div>
+				    <label class="control-label">{{mom.subject}} : {{mom.created_by}}</label>
+
+				    <button style="float:right" type="button" class="btn btn-default" id="btn{{mom.mom_id}}">
+                            Expand
+                    </button>
+
+			        <div id="div{{mom.mom_id}}">
+			            <p class="form-control-static"> <pre>{{mom.text|safe}}</pre> </p>
+			            <p></p>
+			        </div>
+			        <hr>
+
 				    	<!--comments area>
 				    	<label for="user_id" class="col-lg-1">UserName</label>
 						<div class ="col-lg-11">
 							<input class="form-control focusedInput" type="text" value="Post comment here...">
 						</div>
-					
+
 						<label for="user_id" class="col-lg-1">UserName</label>
 						<div class ="col-lg-11">
 							<input class="form-control focusedInput" type="text" value="Post comment here...">
 						</div-->
-					
+
 				</div><!--/.control-group -->
 		    </div><!--/.container -->
 		    <!-- end of MOM container -->

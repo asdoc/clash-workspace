@@ -1,3 +1,11 @@
 <html>
-    <a href="/feeds/{{ team }}">Enter</a>
+    <script>
+        function func()
+        {
+            window.location="/feeds/{{team}}"
+        }
+    </script>
+    <body onload="func()">
+        Logging you in...
+    </body>
 </html>
