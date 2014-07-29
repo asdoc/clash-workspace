@@ -5,7 +5,7 @@
 ###Testing the app:
 
   * Create files in the root directory of the app:
-      - file/
+      - files/
       - app/static/files/
     
   * Create the database using command:
