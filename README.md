@@ -11,10 +11,10 @@
   * Create the database using command:
       - python manage.py syncdb
     
-  * Create database fields from the /admin url. This app assumes that there are three Team entries named
-    - round1
-    - round2
-    - swifttyper
+  * Create database fields from the /admin url. Add database entries for
+      - Users
+      - Teams
+      - Permissions
 
   * After creation of users, run the scripts from root directory of the app :
     ```
